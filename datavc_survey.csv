@@ -1,0 +1,41 @@
+optional,type,name,label,choice1,choice2,choice3,choice4,choice5,choice6,showif,choice7,choice8,class,choice9,choice10,choice11,choice12,choice13,choice14
+*,note,note_intro,"My name is Florian Pethig and I am a researcher at the Chair of Enterprise Systems at University of Mannheim. As part of the [Open Science Fellows Program](https://en.wikiversity.org/wiki/Wikimedia_Deutschland/Open_Science_Fellows_Program) funded by [Wikimedia Deutschland](https://www.wikimedia.de), I am doing a survey about how researchers process and analyze their empirical research data. Answering the survey will take between 5 and 10 minutes.
+
+Your responses will serve as important input for [my project](https://de.wikiversity.org/wiki/Wikiversity:Fellow-Programm_Freies_Wissen/Einreichungen/Data_Version_Control:_Best_Practice_for_Reproducible,_Shareable_Science%3F) that identifies suitable tools to facilitate version control of research data. In the spirit of open science, I plan to publish the responses to this survey, but they will be kept anonymous.
+
+Your participation in this research is voluntary. You have the right to withdraw from the survey at any point and for any reason without penalty. By clicking the forward button, you acknowledge that you have read the information above and are consenting to participate. You are free to skip any question that you choose.
+
+If you have any questions or suggestions, please feel free to contact me at [pethig@uni-mannheim.de](mailto:pethig@uni-mannheim.de).
+
+Best,
+Florian",,,,,,,,,,label_align_left mc_vertical,,,,,,
+*,submit,page1,Go on,,,,,,,,,,label_align_left mc_vertical,,,,,,
+*,select_or_add_one,position,"What is your current academic position? 
+ *If you need more choices, just add your own by typing into the search field and pressing enter.*",PhD student,Postdoctoral researcher,Junior or assistant professor,Associate or full professor,,,,,,label_align_left mc_vertical,,,,,,
+!,mc,mc_empirical,Are you involved in a research project that deals with empirical data? This can also include secondary data.,Yes,No,,,,,,,,label_align_left mc_vertical,,,,,,
+*,mc,mc_group,How many researchers typically collaborate on your research projects?,I mostly work on my own,2-3,4-5,6-7,\>= 8,,,,,label_align_left mc_vertical,,,,,,
+*,submit,page2,Go on,,,,,,,,,,label_align_left mc_vertical,,,,,,
+*,mc_multiple,mc_data_type,"What type of data do you usually work with in your research? 
+ *You can select multiple responses.*","Qualitative data (e.g., interview data, product reviews)","Quantitative data (e.g., survey data, observational data, web logs)",Geospatial data,Digital image data,Digital audio data,Digital video data,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,mc,mc_data_size,What is the average file size of the data that you typically work with?,< 1 MB,\>= 1 MB and < 10 MB,\>= 10 MB and < 100 MB,\>= 100 MB and < 1 GB,\>= 1 GB and < 10 GB,\>= 10 GB and < 100 GB,mc_empirical != 2,\>= 100 GB and < 1 TB,\>= 1 TB,label_align_left mc_vertical,,,,,,
+*,submit,page3,Go on,,,,,,,,,,label_align_left mc_vertical,,,,,,
+*,textarea,pre_process,"Please describe the steps that you typically perform to pre-process your research data before analyzing (e.g., data cleansing, filtering, tokenization).",,,,,,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,textarea,rep_process,"Please describe the steps that you take to ensure the reproducibility of pre-processing steps. For example, do you note down which filters you applied (e.g., in Word, Excel, or as part of a script)?",,,,,,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,textarea,prob_rep,Have you ever faced problems when trying to reproduce **your own** or **others'** pre-processing steps? Please describe them shortly.,,,,,,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,submit,page4,Go on,,,,,,,,,,label_align_left mc_vertical,,,,,,
+*,mc_multiple,tool1,Which programming languages/tools do you use to **pre-process** your data?,Python,R,Stata,SPSS,SAS,Excel,mc_empirical != 2,Word,Nvivo,label_align_left,MAXQDA,Atlas.ti,,,,
+*,mc_multiple,tool2,Which programming languages/tools do you use to **analyze** your data?,Python,R,Stata,SPSS,SAS,Excel,mc_empirical != 2,Word,Nvivo,label_align_left,MAXQDA,Atlas.ti,,,,
+*,textarea,other_tools,"If you selected **other** above, please specify the tool(s) that you are using.",,,,,,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,submit,page5,Go on,,,,,,,,,,label_align_left mc_vertical,,,,,,
+*,mc_multiple,storage,Where do you store **preliminary versions** of your research data?,Google Drive,OneDrive,Sharepoint,Dropbox,Nextcloud,AWS,mc_empirical != 2,Google Cloud,Microsoft Azure,label_align_left,osf.io,zenodo,Own computer,External hard drive,University servers,Other
+*,mc_multiple,storag2,Where do you store the **final version** of your research data?,Google Drive,OneDrive,Sharepoint,Dropbox,Nextcloud,AWS,mc_empirical != 2,Google Cloud,Microsoft Azure,label_align_left,osf.io,zenodo,Own computer,External hard drive,University servers,Other
+*,textarea,other_store,"If you selected **other** above, please specify the storage(s) that you are using.",,,,,,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,submit,page6,Go on,,,,,,,,,,label_align_left mc_vertical,,,,,,
+*,mc_multiple,vercon1,"What kind of version control do you use for manuscripts (e.g., Word files, LaTex)?","I use specific tools for version control, like Git (e.g., GitLab, GitHub, Bitbucket)","I mark versions using different file names, like *manuscript_v1.0*, *manuscript_10feb*","I use built-in version control offered by my tool, like versions stored in cloud services (e.g., OneDrive)",None,Other,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,mc_multiple,vercon2,"What kind of version control do you use for data analysis (e.g., Python scripts, DO-files)?","I use specific tools for version control, like Git (e.g., GitLab, GitHub, Bitbucket)","I mark versions using different file names, like *regression_v1.0*, *regression_10feb*","I use built-in version control offered by my tool, like versions stored in cloud services (e.g., OneDrive)",None,Other,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,mc_multiple,vercon3,"What kind of version control do you use for datasets (e.g., csv, xls, or dta files)?","I use specific tools for version control, like Git (e.g., GitLab, GitHub, Bitbucket)","I mark versions using different file names, like *data_v1.0*, *data_10feb*","I use built-in version control offered by my tool, like versions stored in cloud services (e.g., OneDrive)",None,Other,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,textarea,other_verco,"If you selected **other** above, please specify what kind of version control you are using.",,,,,,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,textarea,dvc,"A number of new tools, such as [DVC](https://dvc.org), [Dolt](https://www.dolthub.com), or [Git LFS](https://git-lfs.github.com), offer the possibility to version control large datasets. Have you worked with any of these or similar tools? If **yes**, please name the tool(s) and briefly describe your experiences. If **not**, you can leave the field empty.",,,,,,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,submit,page7,Go on,,,,,,,,,,label_align_left mc_vertical,,,,,,
+*,textarea,feedback,"If you have any comments, put them in the text box. If anything in the survey was unclear, I would greatly appreciate your letting me know.",,,,,,,mc_empirical != 2,,,label_align_left mc_vertical,,,,,,
+*,submit,page8,Go on,,,,,,,,,,label_align_left mc_vertical,,,,,,
