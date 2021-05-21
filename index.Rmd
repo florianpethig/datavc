@@ -11,17 +11,17 @@ Real world data, such as logs, comments, and reviews, are usually messy and requ
 
 ## Are researchers already using data version control?
 
-As part of my fellowship, I launched a survey to understand research practices among other fellows and alumnus. In particular, I asked them how they were versioning the different parts of their research endeavor, such as the manuscript the data and the scripts. Although version control was very prevalent for manuscripts and data analysis scripts, version control of the data was not so common. This clearly shows a gap in the current pipeline.
+I distributed a survey through the channels of the fellow program (n=15 completed answers) to understand current data research practices among other researchers from various disciplines. In particular, I asked them how they were versioning the different parts of their research projects, such as the manuscript, data analysis, but also the data itself. Interestingly, sophisticated data versioning practices (using GitHub or built-in functionalities of cloud storages) was prevalent for manuscript and data analysis versioning (> 50%). However, few researchers used Git for the data itself (n=3) and none of them were aware of specific tools for the versioning of larger data sets. Instead, several researchers voiced their interest in such tools and asked to be updated about this project in the future. In sum, the results indicate that data version control is neither a prevalent practice nor do researchers know about the advantages and disadvantages of specific tools. This shows a gap in the current research pipeline.
 
 ## Which tools exist?
 
-"Git for data" has been a question originally posted on Stack Exchange. 
+These findings presented a great motivation for my project ecause they indicated a clear need in the research community (at least within the narrow sample of participants I surveyed). At the start of my research, I came across an old Stack Exchange post from 2013 with 16k views, which asked whether "Git for data" existed.
 
 ```{r git-for-data, echo=FALSE, fig.cap="'Is there a Git for data' on Stack Exchange (source: [https://opendata.stackexchange.com/questions/748/is-there-a-git-for-data](https://opendata.stackexchange.com/questions/748/is-there-a-git-for-data))",  fig.align="center", out.width="50%"}
 knitr::include_graphics("figures/git_for_data.png")
 ```
 
-Since then many tools have been developed to deal with version control of data. One list can be found here: [https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0](https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0). A discussion of that list can be found here: [https://www.youtube.com/watch?v=r5uxntl_hWg](https://www.youtube.com/watch?v=r5uxntl_hWg)
+Back then, Git for data wasn't something that really existed on the market. However, with the rise in data volume and, especially through the broad application of machine learning in many organizations, it became increasingly required to reproduce and share datasets. Thus, more recently, there have been a rise in open source tools that allow versions of datasets to be tracked over time. One comprehensive list of tools is available from: [https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0](https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0). Moreover, a discussion of these tools is available from: [https://www.youtube.com/watch?v=r5uxntl_hWg](https://www.youtube.com/watch?v=r5uxntl_hWg).
 
 Git for data specifically allows for the versioning of different data sets and pipelines. As researchers have increasingly embraced git to version control manuscripts and scripts, version control of data is not on the radar of many researchers.
 
