@@ -23,13 +23,10 @@ knitr::include_graphics("figures/git_for_data.png")
 
 Back then, Git for data wasn't something that really existed on the market. However, with the rise in data volume and, especially through the broad application of machine learning in many organizations, it became increasingly required to reproduce and share datasets. Thus, more recently, there have been a rise in open source tools that allow versions of datasets to be tracked over time. One comprehensive list of tools is available from: [https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0](https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0). Moreover, a discussion of these tools is available from: [https://www.youtube.com/watch?v=r5uxntl_hWg](https://www.youtube.com/watch?v=r5uxntl_hWg).
 
-Git for data specifically allows for the versioning of different data sets and pipelines. As researchers have increasingly embraced git to version control manuscripts and scripts, version control of data is not on the radar of many researchers.
+The available tools range from dedicated databases with version control capabilities ([DoltHub](https://github.com/dolthub/dolt), [TerminusDB](https://github.com/terminusdb/terminusdb)) to tools that are storage agnostic and allow for the versioning of the entire data pipeline [DVC](https://github.com/iterative/dvc).
 
 ## Which tools should researchers use?
 
-It depends on the use case. As outlined in the video shown above, there are different kinds of tools available, some offering more of a database-like tool where you can store data and see version control of that data, others offer you a more replicable research pipeline. Many (not all) are open source, which would definitely be an advantage.
+It depends on the use case. As outlined above, different kind of tools available. DoltHub, for example, is an open source SQL database with the ability to track differences in the data stored in the database. If multiple researchers are crawling data and each of them is submitting their piece to the database, such a solution might be ideal. However, in this case, researchers do not have the full flexibility as to where their data is stored. DVC, on the other hand, is a lightweight tool and storage agnostic, which only saves meta data about changes in the datasets. These files can then be tracked via Git. Thus, as you can tell by these examples, researchers first should select their scope before they select the solution.
 
-Dolthub, for example, are advertising their space as a version controlled database which different people can make additions.
-
-DVC is a pipeline tool that’s lightweight and storage agnostic.
-
+Overall, as researchers have increasingly embraced Git to version control their research projects, 'Git for data'-tools are not on the radar of many researchers. In this first post, I gave a brief outline of the motivation and presented an overview of available products. Due to the heterogeneity in the tool landscape, I will be posting further in-depth discussions of different tools within this blog series.
