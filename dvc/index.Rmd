@@ -1,5 +1,5 @@
 ---
-title: "Tool 1: Data Version Control (DVC)"
+title: "Tool 1: Data Version Control (DVC) (work in progress)"
 author: "Florian Pethig"
 date: "Last updated: `r format(Sys.time(), '%d %B %Y')`"
 output: html_document
@@ -15,7 +15,7 @@ DVC is an open source tool for the versioning of datasets and machine learning m
 
 For research projects, this is particularly relevant because, as I've found in a recent survey (summarized [here](https://de.wikiversity.org/wiki/Wikiversity:Fellow-Programm_Freies_Wissen/Einreichungen/Data_Version_Control:_Best_Practice_for_Reproducible,_Shareable_Science%3F/Book)), researchers tend to store their data in all kinds of different locations. This means that DVC should be relatively easy to integrate into existing workflows. In this tutorial, I will show the integration of DVC with Google Drive because this tends to be the dominant cloud storage solution (according to my survey). This tutorial is loosely based on this [video](https://www.youtube.com/watch?v=kLKBcPonMYw).
 
-## Installation and Setup
+## Installation and setup
 
 To install DVC, open the terminal and type:
 
@@ -30,6 +30,8 @@ mkdir dvc
 git init
 dvc init
 ```
+
+## Track files
 
 Next, we need a dataset. For this tutorial, I downloaded the [Yelp Open Dataset](https://www.yelp.com/dataset) because it is free for academic purposes but you are free to choose other data as well. After downloading the data, I add it to a new subfolder called `data`. Next, we need to tell DVC that it should be tracking all changes in the Yelp dataset and we do that with the command `dvc add`. Lastly, we tell Git to ignore the original dataset and, instead, we only track the metadata that has been created about the original data. 
 
