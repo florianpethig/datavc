@@ -1,0 +1,63 @@
+---
+title: "Tool 1: Data Version Control (DVC)"
+author: "Florian Pethig"
+date: "Last updated: `r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+
+## Motivation
+
+The first tool that I want to evaluate for the version control of research data is called DVC ([https://dvc.org](https://dvc.org)), which (surprise, surprise) is an abbreviation of "data version control". Nonetheless, as I outlined in my previous post, DVC is not the only available tool in this context. In this post, I want to offer a hands-on approach for DVC and how it could be integrated into your own research projects. Finally, I will offer an evaluation and some concluding thoughts.
+
+## What's DVC?
+
+DVC is an open source tool for the versioning of datasets and machine learning models. A big advantage of DVC is that it is compatible with many different remote storages, such as Google Drive. However, this also means that DVC is not a tool for data storage but rather a tool that enables you to version your data in whichever storage you choose. 
+
+For research projects, this is particularly relevant because, as I've found in a recent survey (summarized [here](https://de.wikiversity.org/wiki/Wikiversity:Fellow-Programm_Freies_Wissen/Einreichungen/Data_Version_Control:_Best_Practice_for_Reproducible,_Shareable_Science%3F/Book)), researchers tend to store their data in all kinds of different locations. This means that DVC should be relatively easy to integrate into existing workflows. In this tutorial, I will show the integration of DVC with Google Drive because this tends to be the dominant cloud storage solution (according to my survey). This tutorial is loosely based on this [video](https://www.youtube.com/watch?v=kLKBcPonMYw).
+
+## Installation and Setup
+
+To install DVC, open the terminal and type:
+
+```{bash dvc-install, include=TRUE, eval=FALSE}
+pip install dvc
+```
+
+Next, we create a folder called `dvc` and initialize Git and DVC in the current working directory.
+
+```{bash dvc-init, include=TRUE, eval=FALSE}
+mkdir dvc
+git init
+dvc init
+```
+
+Next, we need a dataset. For this tutorial, I downloaded the [Yelp Open Dataset](https://www.yelp.com/dataset) because it is free for academic purposes but you are free to choose other data as well. After downloading the data, I add it to a new subfolder called `data`. Next, we need to tell DVC that it should be tracking all changes in the Yelp dataset and we do that with the command `dvc add`. Lastly, we tell Git to ignore the original dataset and, instead, we only track the metadata that has been created about the original data. 
+
+```{bash dvc-data, include=TRUE, eval=FALSE}
+# add new data subfolder and add the Yelp data
+mkdir data
+
+# add the Yelp file to dvc tracking
+dvc add data/yelp_academic_dataset_covid_features.json
+
+# add data file to gitignore and dvc file to tracking
+git add data/.gitignore data/yelp_academic_dataset_covid_features.json.dvc
+git commit -m "added comment file to dvc tracking"
+```
+
+Let's now set up our remote storage on Google Drive to store all the different versions of the datasets. Open the browser, navigate to Google Drive and create a new folder. You should then copy folder id in the link displayed in the browser and insert it below.
+
+Once you type `dvc push`, the terminal will ask you to authenticate.
+
+```{bash dvc-gdrive, include=TRUE, eval=FALSE}
+# add the remote storage
+dvc remote add -d storage gdrive://1uJd-tbfpL4lBj26OCdz_GJX_jzmMb_en #replace with your own id
+
+# add the config file to git
+git commit .dvc/config -m "configured remote storage"
+
+# push the file to remote storage
+dvc push
+```
+
+You can now check your Google Drive folder and should see that the file is available there. Your dataset is now version-controlled with DVC. Lastly, I would like to show you what happens when you modify your dataset and how you can go back and forth in time.
