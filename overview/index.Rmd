@@ -7,6 +7,10 @@ output: html_document
 
 ```{r libraries, include=FALSE}
 library(pander)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(RColorBrewer)
 ```
 
 ## Motivation
@@ -15,9 +19,78 @@ Real world data, such as logs, comments, and reviews, are usually messy and requ
 
 ## Current Practices
 
-I distributed a survey[^1] through the channels of the [Open Science Fellows Program](https://en.wikiversity.org/wiki/Wikimedia_Deutschland/Open_Science_Fellows_Program) (n=15 completed answers) to understand current data research practices among other researchers from various disciplines (a summary of the results is available [here](https://de.wikiversity.org/wiki/Wikiversity:Fellow-Programm_Freies_Wissen/Einreichungen/Data_Version_Control:_Best_Practice_for_Reproducible,_Shareable_Science%3F/Book) and the raw data is available from [https://osf.io/vjxkq/](https://osf.io/vjxkq/)). Specifically, I asked other researchers how they were versioning the different parts of their research projects, such as the manuscript, data analysis, but also the data itself, to ensure reproducibility. Interestingly, sophisticated data versioning practices (using GitHub or built-in functionalities of cloud storages) was prevalent for the manuscript itself (~50%) and the data analysis scripts (~66%). This shows that topics, such as reproducibility and versioning, are on the radar of many researchers. However, few researchers used Git for the data itself (n=3) and none of them were aware of specific tools for the versioning of larger data sets. Instead, several researchers voiced their interest in such tools and asked to be updated about this project in the future. In sum, the results indicate that version control of data is neither a prevalent practice nor do researchers know about the advantages and disadvantages of specific tools. This shows a gap in the way researchers version the different parts of their research projects.
+I distributed a survey[^1] through the channels of the [Open Science Fellows Program](https://en.wikiversity.org/wiki/Wikimedia_Deutschland/Open_Science_Fellows_Program) (n=15) to understand current data research practices among other researchers from various disciplines[^2]. Specifically, I asked other researchers how they were versioning the different parts of their research projects, such as the manuscript, data analysis, but also the data itself, to ensure reproducibility. As shown in the graph below, sophisticated data versioning practices (using GitHub or built-in functionalities of cloud storages) was prevalent for the manuscript itself (~50%) and the data analysis scripts (~66%). This shows that topics, such as reproducibility and versioning, are on the radar of many researchers. However, few researchers used Git for the data itself (n=3) and none of them were aware of specific tools for the versioning of larger data sets. Instead, several researchers voiced their interest in such tools and asked to be updated about this project in the future. In sum, the results indicate that version control of data is neither a prevalent practice nor do researchers know about the advantages and disadvantages of specific tools. This shows a gap in the way researchers version the different parts of their research projects.
 
-## Which Tools Exist?
+```{r bar, echo=FALSE}
+df_results <-
+  read.csv("../survey/datavc_survey_results.csv", na.strings = c("", "NA"))
+df_vercon <- select(df_results, vercon1, vercon2, vercon3)
+df_vercon <- df_vercon %>% drop_na()
+df_vercon1 <- df_results %>%
+  select(vercon1) %>%
+  mutate(vercon1 = strsplit(gsub(" ", "", vercon1), ",")) %>%
+  unnest(vercon1) %>% count(vercon1) %>% slice(1:3) %>% rename(vercon =
+                                                                 vercon1)
+df_vercon2 <- df_vercon %>%
+  select(vercon2) %>%
+  mutate(vercon2 = strsplit(gsub(" ", "", vercon2), ",")) %>%
+  unnest(vercon2) %>% count(vercon2) %>% slice(1:3) %>% rename(vercon =
+                                                                 vercon2)
+df_vercon3 <- df_vercon %>%
+  select(vercon3) %>%
+  mutate(vercon3 = strsplit(gsub(" ", "", vercon3), ",")) %>%
+  unnest(vercon3) %>% count(vercon3) %>% slice(1:3) %>% rename(vercon =
+                                                                 vercon3)
+
+type <-
+  c(
+    rep("Manuscript \n (e.g., Word, LaTeX)", 3),
+    rep("Data analysis \n (e.g., py script, DO-file)", 3),
+    rep("Dataset \n (e.g., csv, dta, xls)", 3)
+  )
+
+df_combined <- rbind(df_vercon1, df_vercon2, df_vercon3)
+df_combined <- cbind(type, df_combined)
+
+df_combined$vercon = replace(
+  df_combined$vercon,
+  values = c(
+    "Specific tools (e.g., GitHub)",
+    "Different file names (v1, v2)",
+    "Version control of cloud storage"
+  )
+)
+
+df_combined$ordered <-
+  factor(
+    df_combined$type,
+    levels = c(
+      "Manuscript \n (e.g., Word, LaTeX)",
+      "Data analysis \n (e.g., py script, DO-file)",
+      "Dataset \n (e.g., csv, dta, xls)"
+    )
+  )
+
+labels <-
+  c(vercon = "Custom Value 1", "2" = "Custom Value 2", "3" = "Custom Value 3")
+
+theme_set(theme_classic())
+p <- ggplot(df_combined, aes(fill = vercon, y = n, x = ordered)) +
+  geom_bar(position = "fill", stat = "identity") +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank()) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(fill = "Type of version control") +
+  scale_fill_brewer(palette = "Blues")
+
+p
+
+
+# show table
+#library(knitr)
+#kable(df)
+```
+
+## Existing Tools
 
 These findings presented a great motivation for my project because they indicated a clear need in the research community (of course, within the narrow sample of participants I asked). While searching for specific tools, I came across an old Stack Exchange post from 2013, which asked whether "Git for data" existed.
 
@@ -25,7 +98,7 @@ These findings presented a great motivation for my project because they indicate
 knitr::include_graphics("figures/git_for_data.png")
 ```
 
-Interestingly, back then, Git for data wasn't something that existed as a software tool. However, with the increase in data volume and through the broad application of machine learning in many organizations, it became increasingly required to reproduce and share data. Thus, more recently, there has been a rise in open source tools that allow versions of datasets to be tracked over time. During my research, I came across several tools, of which I selected 5 tools, which fulfilled the following criteria: First, they should be entirely open source. Second, they should not be restricted to a specific application area, such as machine learning or extract, transform, load (ETL) pipelines.[^2] The available tools range from dedicated databases with version control capabilities (e.g., [DoltHub](https://github.com/dolthub/dolt), [TerminusDB](https://github.com/terminusdb/terminusdb)) to tools that are storage agnostic and allow for the versioning of the entire data pipeline (e.g., [DVC](https://github.com/iterative/dvc)).
+Interestingly, back then, Git for data wasn't something that existed as a software tool. However, with the increase in data volume and through the broad application of machine learning in many organizations, it became increasingly required to reproduce and share data. Thus, more recently, there has been a rise in open source tools that allow versions of datasets to be tracked over time. During my research, I came across several tools, of which I selected 5 tools[^3], which fulfilled the following criteria: First, they should be entirely open source. Second, they should not be restricted to a specific application area, such as machine learning or extract, transform, load (ETL) pipelines. The available tools range from dedicated databases with version control capabilities (e.g., [DoltHub](https://github.com/dolthub/dolt), [TerminusDB](https://github.com/terminusdb/terminusdb)) to tools that are storage agnostic and allow for the versioning of the entire data pipeline (e.g., [DVC](https://github.com/iterative/dvc)).
 
 ```{r tools, echo=FALSE}
 Name <-
@@ -50,14 +123,21 @@ Focus <-
     'Data version control',
     'Revision controlled graph database'
     )
+Description <-
+  c(
+    'Management and versioning of datasets and machine learning models. Data can be saved in a number of different cloud or remote storage locations.',
+    'SQL database that you can fork, clone, branch, merge, push and pull like a git repository.',
+    'Replaces large files such as audio samples, videos, datasets, and graphics with text pointers inside Git, while storing the file contents on a remote server',
+    'Global dataset version control system built on the distributed web.',
+    'hello'
+  )
 df_links <- data.frame(Name, URL, Focus)
 pander(
   df_links,
   style = 'simple',
-  split.table = 120,
-  #split.cells = c("10%", "15%", "37.5%", "37.5%"),
-  justify = c('left', 'left', 'left')
-  #caption = "Links"
+  split.table = 180,
+  #split.cells = c("10%", "15%", "35%", "40%"),
+  justify = 'left'
 )
 ```
 
@@ -68,6 +148,7 @@ It depends on the use case. As outlined above, there are different kinds of tool
 
 Overall, as researchers have increasingly embraced Git to version control their research projects, 'Git for data'-tools are not on the radar of many researchers. In this first post, I gave a brief outline of the motivation and presented an overview of available products. Due to the heterogeneity in the tool landscape, I will be posting further in-depth discussions of different tools within this blog series. The first tool that I evaluate is DVC and the post is available [here](https://florianpethig.github.io/datavc/dvc).
 
-[^1]: To set up the survey, I used [formr](https://formr.org) that produces well-formatted surveys based CSV files. 
-[^2]: A more comprehensive list of tools is available from: [https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0](https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0). Moreover, a discussion of these tools is available from: [https://www.youtube.com/watch?v=r5uxntl_hWg](https://www.youtube.com/watch?v=r5uxntl_hWg).
+[^1]: I used [formr](https://formr.org) because it is an open source tool that produces well-formatted surveys based on CSV files. 
+[^2]: A summary of the results is available from: [https://de.wikiversity.org/wiki/Wikiversity:Fellow-Programm_Freies_Wissen/Einreichungen/Data_Version_Control:_Best_Practice_for_Reproducible,_Shareable_Science%3F/Book](https://de.wikiversity.org/wiki/Wikiversity:Fellow-Programm_Freies_Wissen/Einreichungen/Data_Version_Control:_Best_Practice_for_Reproducible,_Shareable_Science%3F/Book) and the raw data is available from [https://osf.io/vjxkq/](https://osf.io/vjxkq/).
+[^3]: A more comprehensive list of tools is available from: [https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0](https://docs.google.com/spreadsheets/d/1jGQY_wjj7dYVne6toyzmU7Ni0tfm-fUEmdh7Nw_ZH0k/edit?ts=5fc6a2a5#gid=0). Moreover, a discussion of these tools is available from: [https://www.youtube.com/watch?v=r5uxntl_hWg](https://www.youtube.com/watch?v=r5uxntl_hWg).
 
