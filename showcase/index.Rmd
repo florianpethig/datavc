@@ -189,7 +189,7 @@ background-color: #7A8F88
 
 .pull-left[
 ### Sincere thanks to:
-+ Tamara Heck (Mentorin)
++ Dr. Tamara Heck (Mentorin)
 + Antonia Kowe (Fellow)
 + Survey Participants
 + Team Science @Wikimedia
