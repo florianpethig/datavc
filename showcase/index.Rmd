@@ -1,0 +1,226 @@
+---
+title: "Data version control"
+subtitle: "Open Science Fellows Program"
+author: Dr. Florian Pethig
+role: Postdoc
+company: '@University of Mannheim'
+date: "2021-06-18"
+output:
+  xaringan::moon_reader:
+    anchor_sections: FALSE
+    css: ["default", "assets/css/my-theme.css", "assets/css/my-fonts.css"]
+    seal: false 
+    lib_dir: libs
+    nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: solarized-light
+      highlightLanguage: ["r", "css", "yaml"]
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      in_header: header.html  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.path="figs/", echo=FALSE, warning=FALSE, message=FALSE, fig.retina=3, fig.asp=.5, out.width='100%', fig.showtext = TRUE, comment = NULL)
+
+# for cran plots
+library(cranlogs)
+library(tidyverse)
+
+# for fonts
+library(showtext)
+font_add_google("Bitter", "Bitter")
+showtext_auto()
+theme_set(theme_minimal(base_family = "Bitter"))
+
+# for colors
+pkg_colors <- c("palmerpenguins" = "#7899d4", 
+                "blogdown" = "#f5ab1f", 
+                "distill" = "#b74f6f")
+
+library(xaringanExtra)
+xaringanExtra::use_panelset()
+```
+
+class: title-slide, left, middle
+background-image: url("images/fellows.png")
+background-position: right
+background-size: contain
+background-color: #FFFFFF
+
+.pull-left[
+
+# `r rmarkdown::metadata$title`
+
+## `r rmarkdown::metadata$subtitle`
+
+### `r rmarkdown::metadata$author`
+
+### `r rmarkdown::metadata$date`
+
+]
+
+.footnote[Layout based on [apreshill](https://github.com/apreshill/talks/tree/master/ares-kind-tools
+).]
+
+---
+class: middle, center, inverse
+
+## .big-text[Hello.]
+
+---
+name: hello
+class: middle, center, inverse
+
+
+### `r rmarkdown::metadata$author`
+
+<img style="border-radius: 50%;" src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Florian_Pethig.jpg" width="150px"/>
+
+### `r rmarkdown::metadata$role`
+
+### `r rmarkdown::metadata$company`
+
+[`r fontawesome::fa("github")` @florianpethig](https://github.com/florianpethig)    
+[`r fontawesome::fa("twitter")` @florianpethig](https://twitter.com/florianpethig)   
+[`r fontawesome::fa("envelope")` pethig@uni-mannheim.de](mailto:pethig@uni-mannheim.de)
+
+---
+class: middle, center
+
+```{r vercon}
+df_combined <- read.csv('~/Documents/showcase/data/vercon.csv')
+
+df_combined$ordered <-
+  factor(
+    df_combined$type,
+    levels = c(
+      "Manuscript \n (e.g., Word, LaTeX)",
+      "Data analysis \n (e.g., py script, DO-file)",
+      "Dataset \n (e.g., csv, dta, xls)"
+    )
+  )
+
+df_combined$ordered_fill <-
+  factor(
+    df_combined$vercon,
+    levels = c(
+      "Specific tools (e.g., GitHub)",
+      "Different file names (v1, v2)",
+      "Version control of cloud storage",
+      "Other",
+      "None"
+    )
+  )
+
+ggplot(df_combined, aes(fill = ordered_fill, y = n, x = ordered)) +
+  geom_bar(position = "fill", stat = "identity") +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank(),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(fill = "Version control") +
+  scale_fill_manual(values = c("#344966", "#7595A4", "#45635D", "#7A8F88", "#824F71"))
+  #scale_fill_brewer(palette = "Greys")
+```
+
+---
+
+background-image: url(images/git_for_data.png)
+background-size: 60%
+background-position: top
+class: bottom, center, inverse
+background-color: #824F71
+
+.footnote[[Source](https://opendata.stackexchange.com/questions/748/is-there-a-git-for-data)]
+
+---
+
+background-image: url(images/git_for_data.png)
+background-size: 60%
+background-position: top
+class: bottom, center, inverse
+background-color: #824F71
+
+#### From "is there" to "do we need" git for data?
+
+.footnote[[Source](https://opendata.stackexchange.com/questions/748/is-there-a-git-for-data)]
+
+---
+
+background-image: url(images/stone-tools.jpg)
+background-size: cover
+
+.footnote[[Source](https://commons.wikimedia.org/wiki/File:Ancient_Greece_Neolithic_Stone_Tools_%26_Weapons.jpg)]
+
+---
+background-image: url(images/dvc.png)
+background-size: 100%
+
+.footnote[[Source](https://florianpethig.github.io/datavc/overview/)]
+
+---
+background-image: url(images/gitlfs.png)
+background-size: 100%
+
+.footnote[[Source](https://florianpethig.github.io/datavc/overview/)]
+
+---
+background-image: url(images/qri.png)
+background-size: 100%
+
+.footnote[[Source](https://florianpethig.github.io/datavc/overview/)]
+
+---
+background-image: url(images/dbs.png)
+background-size: 100%
+
+.footnote[[Source](https://florianpethig.github.io/datavc/overview/)]
+
+---
+name: goodbye
+class: bottom
+background-color: #7A8F88
+
+.pull-left[
+### Sincere thanks to:
++ Tamara Heck (Mentorin)
++ Antonia Kowe (Fellow)
++ Survey Participants
++ Team Science @Wikimedia
+]
+
+
+.pull-right[
+.right[
+<img style="border-radius: 50%;" src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Florian_Pethig.jpg" width="150px"/>
+
+# Thank you!
+
+### Contact me at...
+
+[`r fontawesome::fa("twitter")` @florianpethig](http://twitter.com/florianpethig)  
+[`r fontawesome::fa("github")` @florianpethig](http://github.com/florianpethig)  
+[`r fontawesome::fa("envelope")` pethig@uni-mannheim.de](mailto:pethig@uni-mannheim.de)
+]
+]
+
+```{r include=FALSE}
+library(metathis)
+meta() %>%
+  meta_description(
+    "Data version control."
+  ) %>% 
+  meta_name("github-repo" = "florianpethig/datavc") %>% 
+  meta_viewport() %>% 
+  meta_social(
+    title = "Data version control",
+    og_author = "Florian Pethig",
+  )
+```
+

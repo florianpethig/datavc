@@ -26,40 +26,39 @@ df_results <-
   read.csv("../survey/datavc_survey_results.csv", na.strings = c("", "NA"))
 df_vercon <- select(df_results, vercon1, vercon2, vercon3)
 df_vercon <- df_vercon %>% drop_na()
-df_vercon1 <- df_results %>%
+df_vercon1 <- df_vercon %>%
   select(vercon1) %>%
   mutate(vercon1 = strsplit(gsub(" ", "", vercon1), ",")) %>%
-  unnest(vercon1) %>% count(vercon1) %>% slice(1:3) %>% rename(vercon =
-                                                                 vercon1)
+  unnest(vercon1) %>% count(vercon1) %>% rename(vercon =
+                                                  vercon1)
 df_vercon2 <- df_vercon %>%
   select(vercon2) %>%
   mutate(vercon2 = strsplit(gsub(" ", "", vercon2), ",")) %>%
-  unnest(vercon2) %>% count(vercon2) %>% slice(1:3) %>% rename(vercon =
-                                                                 vercon2)
+  unnest(vercon2) %>% count(vercon2) %>% rename(vercon =
+                                                  vercon2)
 df_vercon3 <- df_vercon %>%
   select(vercon3) %>%
   mutate(vercon3 = strsplit(gsub(" ", "", vercon3), ",")) %>%
-  unnest(vercon3) %>% count(vercon3) %>% slice(1:3) %>% rename(vercon =
-                                                                 vercon3)
+  unnest(vercon3) %>% count(vercon3) %>% rename(vercon =
+                                                  vercon3)
 
 type <-
   c(
     rep("Manuscript \n (e.g., Word, LaTeX)", 3),
-    rep("Data analysis \n (e.g., py script, DO-file)", 3),
-    rep("Dataset \n (e.g., csv, dta, xls)", 3)
+    rep("Data analysis \n (e.g., py script, DO-file)", 5),
+    rep("Dataset \n (e.g., csv, dta, xls)", 5)
   )
 
 df_combined <- rbind(df_vercon1, df_vercon2, df_vercon3)
 df_combined <- cbind(type, df_combined)
 
-df_combined$vercon = replace(
-  df_combined$vercon,
-  values = c(
-    "Specific tools (e.g., GitHub)",
-    "Different file names (v1, v2)",
-    "Version control of cloud storage"
-  )
-)
+df_combined["vercon"][df_combined["vercon"] == 1] <- "Specific tools (e.g., GitHub)"
+df_combined["vercon"][df_combined["vercon"] == 2] <- "Different file names (v1, v2)"
+df_combined["vercon"][df_combined["vercon"] == 3] <- "Version control of cloud storage"
+df_combined["vercon"][df_combined["vercon"] == 4] <- "Other"
+df_combined["vercon"][df_combined["vercon"] == 5] <- "None"
+
+write.csv(df_combined , row.names = FALSE, '~/Documents/showcase/data/vercon.csv')
 
 df_combined$ordered <-
   factor(
@@ -71,15 +70,24 @@ df_combined$ordered <-
     )
   )
 
-labels <-
-  c(vercon = "Custom Value 1", "2" = "Custom Value 2", "3" = "Custom Value 3")
+df_combined$ordered_fill <-
+  factor(
+    df_combined$vercon,
+    levels = c(
+      "Specific tools (e.g., GitHub)",
+      "Different file names (v1, v2)",
+      "Version control of cloud storage",
+      "Other",
+      "None"
+    )
+  )
 
 theme_set(theme_classic())
-p <- ggplot(df_combined, aes(fill = vercon, y = n, x = ordered)) +
+p <- ggplot(df_combined, aes(fill = ordered_fill, y = n, x = ordered)) +
   geom_bar(position = "fill", stat = "identity") +
   theme(axis.title.x = element_blank(), axis.title.y = element_blank()) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  labs(fill = "Type of version control") +
+  labs(fill = "Version control") +
   scale_fill_brewer(palette = "Blues")
 
 p
