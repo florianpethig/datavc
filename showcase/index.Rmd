@@ -95,7 +95,7 @@ class: middle, center, inverse
 class: middle, center
 
 ```{r vercon}
-df_combined <- read.csv('~/Documents/showcase/data/vercon.csv')
+df_combined <- read.csv('data/vercon.csv')
 
 df_combined$ordered <-
   factor(
